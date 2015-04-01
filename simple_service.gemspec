@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'simple_service_objects/version'
+require 'simple_service/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'simple_service_objects'
-  spec.version       = SimpleServiceObjects::VERSION
+  spec.name          = 'simple_service'
+  spec.version       = SimpleService::VERSION
   spec.authors       = ['Jarrod Spillers']
   spec.email         = ['jarrod@stacktact.com']
   spec.description   = %q{}
   spec.summary       = %q{}
-  spec.homepage      = 'https://github.com/jspillers/simple_service_objects'
+  spec.homepage      = 'https://github.com/jspillers/simple_service'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)

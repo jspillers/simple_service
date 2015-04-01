@@ -1,4 +1,4 @@
-# SimpleServiceObjects
+# SimpleService
 
 TODO: Write a gem description
 
@@ -6,7 +6,7 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'simple_service_objects'
+    gem 'simple_service'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install simple_service_objects
+    $ gem install simple_service
 
 ## Usage
 
