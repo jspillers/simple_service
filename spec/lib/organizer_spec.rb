@@ -2,38 +2,71 @@ require 'spec_helper'
 
 describe SimpleService::Organizer do
 
-  class TestCommandOne < SimpleService::Command
-    def execute; {foo: 'blah'}; end
-  end
+  context 'classes with expects and returns' do
 
-  class TestCommandTwo < SimpleService::Command
-    def execute; {bar: 'meh', baz: 'bleh'}; end
-  end
-
-  class TestOrganizer < SimpleService::Organizer
-    expects :foo, :bar
-    returns :foo, :baz
-    commands TestCommandOne, TestCommandTwo
-  end
-
-  context '#execute' do
-    it 'returns the correct hash' do
-      expect(
-        TestOrganizer.new(foo: 'blah', bar: 'meh').execute
-      ).to eql(foo: 'blah', baz: 'bleh')
+    class TestCommandOne < SimpleService::Command
+      expects :foo
+      returns :foo, :bar
+      def execute
+        context.merge!(bar: 'bar')
+      end
     end
 
-    it 'calls execute on first command' do
-      expect_any_instance_of(TestCommandOne).
-        to receive(:execute).and_return(foo: 'blah')
-      TestOrganizer.new(foo: 'blah', bar: 'meh').execute
+    class TestCommandTwo < SimpleService::Command
+      expects :foo, :bar
+      returns :foo, :bar, :baz
+      def execute
+        context.merge!(baz: 'baz')
+      end
     end
 
-    it 'calls execute on first command' do
-      expect_any_instance_of(TestCommandTwo).
-        to receive(:execute).and_return(bar: 'meh', baz: 'bleh')
-      TestOrganizer.new(foo: 'blah', bar: 'meh').execute
+    class TestOrganizer < SimpleService::Organizer
+      expects :foo
+      returns :foo, :bar, :baz
+      commands TestCommandOne, TestCommandTwo
     end
+
+    describe '#execute' do
+      it 'returns the correct hash' do
+        expect(
+          TestOrganizer.new(foo: 'foo').execute
+        ).to eql(foo: 'foo', bar: 'bar', baz: 'baz')
+      end
+
+    end
+
+  end
+
+  context 'classes with only expects' do
+
+    class TestCommandThree < SimpleService::Command
+      expects :foo
+      def execute
+        context.merge!(bar: 'bar')
+      end
+    end
+
+    class TestCommandFour < SimpleService::Command
+      expects :foo, :bar
+      def execute
+        context.merge!(baz: 'baz')
+      end
+    end
+
+    class TestOrganizerTwo < SimpleService::Organizer
+      expects :foo
+      commands TestCommandThree, TestCommandFour
+    end
+
+    describe '#execute' do
+      it 'returns the entire context' do
+        expect(
+          TestOrganizerTwo.new(foo: 'foo', extra: 'extra').execute
+        ).to eql(foo: 'foo', bar: 'bar', baz: 'baz', extra: 'extra')
+      end
+
+    end
+
   end
 
 end

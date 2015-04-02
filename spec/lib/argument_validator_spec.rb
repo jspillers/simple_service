@@ -12,9 +12,6 @@ describe SimpleService::ArgumentValidator do
       def execute; true; end
     end
 
-    class NoExecuteDefinedCommand < SimpleService::Command
-    end
-
     let(:valid_args) {{
       context: { foo: 'bar'},
       expects: [:foo],
@@ -65,16 +62,6 @@ describe SimpleService::ArgumentValidator do
       }.to raise_error(
         SimpleService::CommandParentClassInvalidError,
         'BadInheritanceCommand - must inherit from SimpleService::Command'
-      )
-    end
-
-    it 'raises error when command does not define an execute method' do
-      expect {
-        args = valid_args.merge(commands: [NoExecuteDefinedCommand])
-        SimpleService::ArgumentValidator.new(args).execute
-      }.to raise_error(
-        SimpleService::CommandExecuteNotDefinedError,
-        'NoExecuteDefinedCommand - does not define an execute method'
       )
     end
 

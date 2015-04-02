@@ -12,7 +12,6 @@ module SimpleService
     def execute
       validate_expected_arguments
       validate_commands_not_empty
-      validate_commands_define_execute
       validate_commands_properly_inherit
       true
     end
@@ -39,18 +38,6 @@ module SimpleService
         raise SimpleService::OrganizerCommandsNotDefinedError, error_msg
       end
 
-    end
-
-    def validate_commands_define_execute
-      invalid_command_klass = commands.select do |command|
-        !command.instance_methods.include?(:execute)
-      end
-
-      if invalid_command_klass.any?
-        error_msg = invalid_command_klass.join(', ') +
-          ' - does not define an execute method'
-        raise SimpleService::CommandExecuteNotDefinedError , error_msg
-      end
     end
 
     def validate_commands_properly_inherit
