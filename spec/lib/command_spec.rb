@@ -35,7 +35,7 @@ describe SimpleService::Command do
         expect {
           NoExecuteDefinedCommand.new.execute
         }.to raise_error(
-          SimpleService::CommandExecuteNotDefinedError,
+          SimpleService::ExecuteNotDefinedError,
           'NoExecuteDefinedCommand - does not define an execute method'
         )
       end

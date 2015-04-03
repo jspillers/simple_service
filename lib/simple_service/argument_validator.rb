@@ -28,7 +28,7 @@ module SimpleService
       if arguments_not_included.any?
         error_msg = 'keys required by the organizer but not found in the context: ' +
           arguments_not_included.join(', ')
-        raise OrganizerExpectedKeyError, error_msg
+        raise ExpectedKeyError, error_msg
       end
     end
 

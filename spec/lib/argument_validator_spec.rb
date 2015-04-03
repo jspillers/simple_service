@@ -40,7 +40,7 @@ describe SimpleService::ArgumentValidator do
         args = valid_args.merge(expects: [:baz])
         SimpleService::ArgumentValidator.new(args).execute
       }.to raise_error(
-        SimpleService::OrganizerExpectedKeyError,
+        SimpleService::ExpectedKeyError,
         'keys required by the organizer but not found in the context: baz'
       )
     end

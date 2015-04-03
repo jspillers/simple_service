@@ -16,7 +16,7 @@ module SimpleService
     # this class
     def execute
       error_msg = "#{self.class} - does not define an execute method"
-      raise SimpleService::CommandExecuteNotDefinedError , error_msg
+      raise SimpleService::ExecuteNotDefinedError , error_msg
     end
 
   end
