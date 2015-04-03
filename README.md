@@ -55,8 +55,19 @@ class DoSomethingImportant < SimpleService::Command
 
   # required - this is where the work gets done, should only
   # do one thing (single responsibility principle)
+  # getters and setters are available for each key specified
+  # in expects and returns. If not using expects and returns
+  # simply interact with the context hash directly
   def execute
+    # uses getters and setters to modify the context
+    modified_something = something.to_i + 1
+
+    # or act directly on the context hash
     context[:modified_something] = context[:something].to_i + 1
+
+    # no need to return anything specific, either the keys 
+    # specified in returns will be returned or the entire 
+    # context if no returns are defined
   end
 
 end
