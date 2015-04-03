@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = SimpleService::VERSION
   spec.authors       = ['Jarrod Spillers']
   spec.email         = ['jarrod@stacktact.com']
-  spec.description   = %q{}
-  spec.summary       = %q{}
+  spec.description   = %q{A minimal service object composer with support for individual commands and top level organizer objects}
+  spec.summary       = spec.description
   spec.homepage      = 'https://github.com/jspillers/simple_service'
   spec.license       = 'MIT'
 
