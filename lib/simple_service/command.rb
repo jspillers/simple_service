@@ -22,8 +22,12 @@ module SimpleService
 
     private
 
+    def all_specified_context_keys
+      (expects + returns)
+    end
+
     def define_getters_and_setters
-      (expects + returns).each do |key|
+      all_specified_context_keys.each do |key|
         self.class.class_eval do
 
           # getter
