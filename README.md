@@ -66,6 +66,8 @@ class DoSomethingImportant < SimpleService::Command
 end
 ```
 
+## Usage
+
 Using the service is straight forward - just instantiate it, passing in the 
 intial context hash, and then call execute.
 
@@ -112,10 +114,6 @@ And then execute:
 Or install it yourself as:
 
     $ gem install simple_service
-
-## Usage
-
-TODO: Write usage instructions here
 
 ## Contributing
 
