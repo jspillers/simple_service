@@ -1,5 +1,7 @@
 # SimpleService
 
+[![Code Climate](https://codeclimate.com/github/jspillers/simple_service/badges/gpa.svg)](https://codeclimate.com/github/jspillers/simple_service)
+
 SimpleService gives you a way to organize service objects such that they adhere 
 to the single responsibility principle. Instead of writing large service objects 
 that perform multiple tasks, SimpleService allows you to breakdown tasks into a 
