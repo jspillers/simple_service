@@ -48,11 +48,11 @@ module SimpleService
       end
 
       def expects
-        self.class.instance_variable_get('@expects')
+        self.class.instance_variable_get('@expects') || []
       end
 
       def returns
-        self.class.instance_variable_get('@returns')
+        self.class.instance_variable_get('@returns') || []
       end
     end
 

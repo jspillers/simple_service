@@ -19,7 +19,7 @@ describe SimpleService::Command do
   class NoExecuteDefinedCommand < SimpleService::Command
   end
 
-  context '#execute' do
+  describe '#execute' do
 
     context 'when #returns is not empty' do
       it 'returns the correct keys from the context' do
@@ -40,6 +40,24 @@ describe SimpleService::Command do
         )
       end
 
+    end
+
+  end
+
+  describe 'context' do
+
+    it 'defines getters for each expected key' do
+      expect(
+        ValidCommand.new(foo: 'blah', bar: 'meh')
+      ).to respond_to :foo
+    end
+
+    it 'defines setters for each expected key' do
+      command = ValidCommand.new(foo: 'blah', bar: 'meh')
+      command.foo = 'changed'
+      command.bar = 'changed'
+
+      expect(command.context).to eql({ foo: 'changed', bar: 'changed' })
     end
 
   end
