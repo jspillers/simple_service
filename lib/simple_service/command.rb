@@ -32,12 +32,12 @@ module SimpleService
 
           # getter
           define_method key do
-            context[key]
+            self.context[key]
           end
 
           # setter
           define_method "#{key}=" do |val|
-            context[key] = val
+            self.context[key] = val
           end
 
         end

@@ -64,7 +64,7 @@ class DoSomethingImportant < SimpleService::Command
   # simply interact with the context hash directly
   def execute
     # uses getters and setters to modify the context
-    modified_something = something.to_i + 1
+    self.modified_something = self.something.to_i + 1
 
     # or act directly on the context hash
     context[:modified_something] = context[:something].to_i + 1

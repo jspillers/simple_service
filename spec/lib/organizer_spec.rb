@@ -69,4 +69,28 @@ describe SimpleService::Organizer do
 
   end
 
+  describe 'service using getters and setters' do
+
+    class GetterSetterCommand < SimpleService::Command
+      expects :foo, :bar
+      returns :baz
+      def execute
+        self.baz = self.foo
+      end
+    end
+
+    class GetterSetterOrganizer < SimpleService::Organizer
+      expects :foo, :bar
+      returns :baz
+      commands GetterSetterCommand
+    end
+
+    it 'returns the correct hash' do
+      expect(
+        GetterSetterOrganizer.new(foo: 'baz', bar: 'bar').execute
+      ).to eql({ baz: 'baz' })
+    end
+
+  end
+
 end

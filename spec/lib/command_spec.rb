@@ -60,6 +60,12 @@ describe SimpleService::Command do
       expect(command.context).to eql({ foo: 'changed', bar: 'changed' })
     end
 
+    it 'getter updates @context' do
+      command = ValidCommand.new(foo: 'blah', bar: 'meh')
+      command.foo = 'changed'
+      expect(command.context).to eql({ foo: 'changed', bar: 'meh'})
+    end
+
   end
 
 end
