@@ -7,8 +7,9 @@
 SimpleService gives you a way to organize service objects such that they adhere 
 to the single responsibility principle. Instead of writing large service objects 
 that perform multiple tasks, SimpleService allows you to breakdown tasks into a 
-set a sequentially performed Command objects. When properly designed, these command
-objects can be reused in multiple different organizers minimizing code duplication.
+set of sequentially performed "Command" objects. Commands are very small classes 
+that perform exactly one task. When properly designed, these command
+objects can be reused in multiple organizers minimizing code duplication.
 
 When an organizer is instantiated a hash of arguments is passed in. This hash 
 is referred to as the context.  The context hash is carried along throughout 
@@ -17,13 +18,16 @@ successful run, the entire context hash (or a specified subset) is returned.
 
 First, setup an Organizer class. An Organizer needs the following things defined:
 
-  * expects: keys that are required to be passed into initialize when an instance 
-    of organizer is created. If not defined the organizer will accept arbitrary arguments.
-  * returns: keys that will be returned when the organizer has executed all of its commands
-  * commands: classes that define all the steps that the organizer will execute. The organizer
-    will call #execute on each command in order and the context hash is passed to each of 
-    these commands. Any keys within the context that are modified will be merged back into
-    the organizer and passed along to the next command.
+  * expects: keys that are required to be passed into initialize when an 
+    instance of organizer is created. If not defined the organizer will 
+    accept arbitrary arguments.
+  * returns: keys that will be returned when the organizer has executed all of 
+    its commands
+  * commands: classes that define all the steps that the organizer will execute. 
+    The organizer will call #execute on each command in order and the context 
+    hash is passed to each of these commands. Any keys within the context that 
+    are modified will be merged back into the organizer and passed along to the 
+    next command.
 
 ```ruby
 class ProcessSomethingComplex < SimpleService::Organizer
@@ -102,7 +106,8 @@ not using rails, a similar structure would also be recommended.
 
 ## Inspiration and Rationale
 
-This gem is heavily inspired by two very nice gems: [mutations](https://github.com/cypriss/mutations) and
+This gem is heavily inspired by two very nice gems: 
+[mutations](https://github.com/cypriss/mutations) and
 [light-service](https://github.com/adomokos/light-service). 
 
 Mutations is a great gem, but lacks the concept of a top level organizer. 
