@@ -64,7 +64,7 @@ module SimpleService
       end
 
       def all_specified_context_keys
-        (expects + returns)
+        (expects + returns).uniq
       end
 
       def define_getters_and_setters

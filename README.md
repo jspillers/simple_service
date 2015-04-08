@@ -109,6 +109,7 @@ For further examination of usage, here are a few examples:
 
 * [hello world example](example/hello_world.rb)
 * [nested services example](example/nested_services.rb)
+* [override #call on the organizer](example/override_organizer_call_method.rb)
 
 ## Inspiration and Rationale
 
