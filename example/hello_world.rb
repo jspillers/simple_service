@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'pry'
 require 'simple_service'
 
 class ConcatName < SimpleService::Command

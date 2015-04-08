@@ -9,6 +9,10 @@ module SimpleService
       def returns(*args)
         @returns = args
       end
+
+      def skip_validation(skip=true)
+        @skip_validation = skip
+      end
     end
 
     module InstanceMethods
@@ -54,6 +58,33 @@ module SimpleService
       def returns
         self.class.instance_variable_get('@returns') || []
       end
+
+      def skip_validation
+        self.class.instance_variable_get('@skip_validation')
+      end
+
+      def all_specified_context_keys
+        (expects + returns)
+      end
+
+      def define_getters_and_setters
+        all_specified_context_keys.each do |key|
+          self.class.class_eval do
+
+            # getter
+            define_method key do
+              self.context[key]
+            end
+
+            # setter
+            define_method "#{key}=" do |val|
+              self.context[key] = val
+            end
+
+          end
+        end
+      end
+
     end
 
   end

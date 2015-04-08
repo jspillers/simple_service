@@ -14,7 +14,8 @@ objects can be reused in multiple organizers minimizing code duplication.
 When an organizer is instantiated a hash of arguments is passed in. This hash 
 is referred to as the context.  The context hash is carried along throughout 
 the sequence of command executions and modified by each command. After a 
-successful run, the entire context hash (or a specified subset) is returned.
+successful run, the keys specified are returned. If keys are not specified, the 
+entire context hash is returned.
 
 First, setup an Organizer class. An Organizer needs the following things defined:
 
@@ -103,6 +104,10 @@ modified_context[:modified_thing] # => 2
 If you are using this with a Rails app, placing top level services in 
 app/services/ and all commands in app/services/commands/ is recommended. If
 not using rails, a similar structure would also be recommended.
+
+For further examination of usage, here are a few examples:
+[hello world example](example/hello_world.rb)
+[nested services example](example/nested_services.rb)
 
 ## Inspiration and Rationale
 
