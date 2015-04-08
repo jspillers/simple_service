@@ -101,11 +101,13 @@ modified_context = ProcessSomethingComplex.new(starting_context).execute
 modified_context[:modified_thing] # => 2
 ```
 
-[hello world example](example/hello_world.rb)
-
 If you are using this with a Rails app, placing top level services in 
 app/services/ and all commands in app/services/commands/ is recommended. If
 not using rails, a similar structure would also be recommended.
+
+For further examination of usage, here are a few examples:
+[hello world example](example/hello_world.rb)
+[nested services example](example/nested_services.rb)
 
 ## Inspiration and Rationale
 
