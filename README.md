@@ -106,8 +106,9 @@ app/services/ and all commands in app/services/commands/ is recommended. If
 not using rails, a similar structure would also be recommended.
 
 For further examination of usage, here are a few examples:
-[hello world example](example/hello_world.rb)
-[nested services example](example/nested_services.rb)
+
+* [hello world example](example/hello_world.rb)
+* [nested services example](example/nested_services.rb)
 
 ## Inspiration and Rationale
 
