@@ -9,14 +9,8 @@ module SimpleService
     def initialize(context={})
       @context = context
 
-      ArgumentValidator.new(
-        context: context,
-        expects: expects,
-        returns: returns,
-        commands: commands
-      ).execute
-
       setup_execute_chain
+      define_getters_and_setters
     end
 
     def self.commands(*args)
@@ -28,11 +22,42 @@ module SimpleService
     end
 
     def execute
-      commands.each do |command|
-        @context.merge!(command.new(context).execute)
+      with_validation do |_commands|
+        _commands.each do |command|
+          @context.merge!(command.new(context).execute)
+        end
       end
     end
 
+    private
+
+    def with_validation
+      add_validation_keys_to_context unless skip_validation
+
+      _commands = skip_validation ? commands : [EnsureOrganizerIsValid] + commands
+
+      yield(_commands)
+
+      remove_validation_keys_from_context unless skip_validation
+    end
+
+    def add_validation_keys_to_context
+      context.merge!(validation_hash)
+    end
+
+    def remove_validation_keys_from_context
+      validation_hash.keys.each do |key|
+        context.delete(key)
+      end
+    end
+
+    def validation_hash
+      @validation_hash ||= {
+        provided_keys: context.keys,
+        expected_keys: expects,
+        provided_commands: commands
+      }
+    end
   end
 
 end
