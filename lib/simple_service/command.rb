@@ -8,20 +8,20 @@ module SimpleService
 
     def initialize(context={})
       @context = context
-      setup_execute_chain
+      setup_call_chain
       define_getters_and_setters
 
       unless skip_validation
-        ValidatesExpectedKeys.new(provided_keys: context.keys).execute
+        ValidatesExpectedKeys.new(provided_keys: context.keys).call
       end
     end
 
-    # execute is where the command's behavior is defined
-    # execute should be overriden by whatever class inherits from
+    # call is where the command's behavior is defined
+    # call should be overriden by whatever class inherits from
     # this class
-    def execute
-      error_msg = "#{self.class} - does not define an execute method"
-      raise SimpleService::ExecuteNotDefinedError , error_msg
+    def call
+      error_msg = "#{self.class} - does not define a call method"
+      raise SimpleService::CallNotDefinedError , error_msg
     end
 
   end

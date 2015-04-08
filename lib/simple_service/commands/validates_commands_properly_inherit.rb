@@ -5,7 +5,7 @@ module SimpleService
 
     skip_validation true
 
-    def execute
+    def call
       # valid commands inherit from Command and do not inherit from service
       # reject all valid commands and anything left over is invalid
       invalid_commands = provided_commands.to_a.reject do |command|

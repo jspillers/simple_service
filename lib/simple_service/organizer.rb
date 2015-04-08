@@ -9,7 +9,7 @@ module SimpleService
     def initialize(context={})
       @context = context
 
-      setup_execute_chain
+      setup_call_chain
       define_getters_and_setters
     end
 
@@ -21,10 +21,10 @@ module SimpleService
       self.class.instance_variable_get('@commands')
     end
 
-    def execute
+    def call
       with_validation do |_commands|
         _commands.each do |command|
-          @context.merge!(command.new(context).execute)
+          @context.merge!(command.new(context).call)
         end
       end
     end

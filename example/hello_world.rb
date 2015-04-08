@@ -5,7 +5,7 @@ class ConcatName < SimpleService::Command
   expects :first_name, :last_name
   returns :name
 
-  def execute
+  def call
     self.name = "#{first_name} #{last_name}"
   end
 end
@@ -14,7 +14,7 @@ class CreateHelloString < SimpleService::Command
   expects :name
   returns :hello
 
-  def execute
+  def call
     self.hello = "#{name}, say hello world!"
   end
 end
@@ -25,5 +25,5 @@ class SayHello < SimpleService::Organizer
   commands ConcatName, CreateHelloString
 end
 
-result = SayHello.new(first_name: 'Ruby', last_name: 'Gem').execute
+result = SayHello.new(first_name: 'Ruby', last_name: 'Gem').call
 puts result[:hello]

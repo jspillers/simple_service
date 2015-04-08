@@ -5,7 +5,7 @@ module SimpleService
 
     skip_validation true
 
-    def execute
+    def call
       arguments_not_included = expected_keys.to_a - provided_keys.to_a
 
       if arguments_not_included.any?

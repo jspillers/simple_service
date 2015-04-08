@@ -5,7 +5,7 @@ module SimpleService
 
     skip_validation true
 
-    def execute
+    def call
       if provided_commands.nil? || provided_commands.empty?
         error_msg = 'This Organizer class does not contain any command definitions'
         raise SimpleService::OrganizerCommandsNotDefinedError, error_msg

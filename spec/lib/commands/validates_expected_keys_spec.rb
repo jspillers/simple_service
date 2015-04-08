@@ -8,7 +8,7 @@ describe SimpleService::ValidatesExpectedKeys do
     some_other_key: 'blah'
   }}
 
-  context '#execute' do
+  context '#call' do
 
     let(:with_valid_keys) {
       SimpleService::ValidatesExpectedKeys.new(valid_keys)
@@ -28,7 +28,7 @@ describe SimpleService::ValidatesExpectedKeys do
 
       it 'does not raise error' do
         expect {
-          with_valid_keys.execute
+          with_valid_keys.call
         }.to_not raise_error
       end
 
@@ -37,7 +37,7 @@ describe SimpleService::ValidatesExpectedKeys do
     context 'when there are expected keys missing from provided keys' do
 
       it 'raises an error' do
-        expect { with_missing_keys.execute }.to raise_error(
+        expect { with_missing_keys.call }.to raise_error(
           SimpleService::ExpectedKeyError,
           'keys required by the organizer but not found in the context: baz'
         )
@@ -49,7 +49,7 @@ describe SimpleService::ValidatesExpectedKeys do
 
       it 'does not raise error' do
         expect {
-          does_not_expect_any_keys.execute
+          does_not_expect_any_keys.call
         }.to_not raise_error
       end
 

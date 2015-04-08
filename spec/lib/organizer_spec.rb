@@ -7,7 +7,7 @@ describe SimpleService::Organizer do
     class TestCommandOne < SimpleService::Command
       expects :foo
       returns :foo, :bar
-      def execute
+      def call
         context.merge!(bar: 'bar')
       end
     end
@@ -15,7 +15,7 @@ describe SimpleService::Organizer do
     class TestCommandTwo < SimpleService::Command
       expects :foo, :bar
       returns :foo, :bar, :baz
-      def execute
+      def call
         context.merge!(baz: 'baz')
       end
     end
@@ -26,10 +26,10 @@ describe SimpleService::Organizer do
       commands TestCommandOne, TestCommandTwo
     end
 
-    describe '#execute' do
+    describe '#call' do
       it 'returns the correct hash' do
         expect(
-          TestOrganizer.new(foo: 'foo').execute
+          TestOrganizer.new(foo: 'foo').call
         ).to eql(foo: 'foo', bar: 'bar', baz: 'baz')
       end
 
@@ -41,14 +41,14 @@ describe SimpleService::Organizer do
 
     class TestCommandThree < SimpleService::Command
       expects :foo
-      def execute
+      def call
         context.merge!(bar: 'bar')
       end
     end
 
     class TestCommandFour < SimpleService::Command
       expects :foo, :bar
-      def execute
+      def call
         context.merge!(baz: 'baz')
       end
     end
@@ -58,10 +58,10 @@ describe SimpleService::Organizer do
       commands TestCommandThree, TestCommandFour
     end
 
-    describe '#execute' do
+    describe '#call' do
       it 'returns the entire context' do
         expect(
-          TestOrganizerTwo.new(foo: 'foo', extra: 'extra').execute
+          TestOrganizerTwo.new(foo: 'foo', extra: 'extra').call
         ).to eql(foo: 'foo', bar: 'bar', baz: 'baz', extra: 'extra')
       end
 
@@ -74,7 +74,7 @@ describe SimpleService::Organizer do
     class GetterSetterCommand < SimpleService::Command
       expects :foo, :bar
       returns :baz
-      def execute
+      def call
         self.baz = self.foo
       end
     end
@@ -87,7 +87,7 @@ describe SimpleService::Organizer do
 
     it 'returns the correct hash' do
       expect(
-        GetterSetterOrganizer.new(foo: 'baz', bar: 'bar').execute
+        GetterSetterOrganizer.new(foo: 'baz', bar: 'bar').call
       ).to eql({ baz: 'baz' })
     end
 

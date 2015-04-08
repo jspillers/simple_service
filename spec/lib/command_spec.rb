@@ -7,7 +7,7 @@ describe SimpleService::Command do
     expects :foo, :bar
     returns :bar, :baz
 
-    def execute
+    def call
       context.merge!(
         bar: 'modified',
         baz: 'blah'
@@ -16,28 +16,25 @@ describe SimpleService::Command do
 
   end
 
-  class NoExecuteDefinedCommand < SimpleService::Command
+  class CallNotDefinedCommand < SimpleService::Command
   end
 
-  describe '#execute' do
+  describe '#call' do
 
     context 'when #returns is not empty' do
       it 'returns the correct keys from the context' do
         expect(
-          ValidCommand.new(foo: 'blah', bar: 'meh').execute
+          ValidCommand.new(foo: 'blah', bar: 'meh').call
         ).to eql(bar: 'modified', baz: 'blah')
       end
     end
 
     context 'raises error' do
 
-      it 'when command does not define an execute method' do
+      it 'when command does not define an call method' do
         expect {
-          NoExecuteDefinedCommand.new.execute
-        }.to raise_error(
-          SimpleService::ExecuteNotDefinedError,
-          'NoExecuteDefinedCommand - does not define an execute method'
-        )
+          CallNotDefinedCommand.new.call
+        }.to raise_error(SimpleService::CallNotDefinedError)
       end
 
     end

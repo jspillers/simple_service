@@ -17,18 +17,18 @@ module SimpleService
 
     module InstanceMethods
 
-      def setup_execute_chain
+      def setup_call_chain
         self.class.class_eval do
 
           # grab the method object and hold onto it here
-          execute_method = instance_method(:execute)
+          call_method = instance_method(:call)
 
-          # redefine the execute method, call the existing execute method object,
-          # and then run return key checking... allows user to implement execute in
+          # redefine the call method, execute the existing call method object,
+          # and then run return key checking... allows user to implement call in
           # their individual command classes without having to call super or any
           # other method to return only specific context keys
-          define_method :execute do
-            execute_method.bind(self).call
+          define_method :call do
+            call_method.bind(self).call
             find_specified_return_keys
           end
         end

@@ -9,7 +9,7 @@ module SimpleService
              ValidatesCommandsNotEmpty,
              ValidatesCommandsProperlyInherit
 
-    def execute
+    def call
       super
 
       # dont return the keys within this internal service
