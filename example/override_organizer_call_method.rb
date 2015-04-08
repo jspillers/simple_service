@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'simple_service'
 
-class ConcatName < SimpleService::Command
+class ConcatAnotherName < SimpleService::Command
   expects :first_name, :last_name
   returns :name
 
@@ -10,7 +10,7 @@ class ConcatName < SimpleService::Command
   end
 end
 
-class CreateHelloString < SimpleService::Command
+class CreateAnotherHelloString < SimpleService::Command
   expects :name
   returns :hello
 
@@ -23,7 +23,7 @@ end
 class SayHelloMultipleTimes < SimpleService::Organizer
   expects :first_name, :last_name, :num_times
   returns :hello
-  commands ConcatName, CreateHelloString
+  commands ConcatAnotherName, CreateAnotherHelloString
 
   # overriding the #call method on the organizer allows
   # you to do things like loop and call the service commands
