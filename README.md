@@ -101,6 +101,8 @@ modified_context = ProcessSomethingComplex.new(starting_context).execute
 modified_context[:modified_thing] # => 2
 ```
 
+(examples/hello_world.md)
+
 If you are using this with a Rails app, placing top level services in 
 app/services/ and all commands in app/services/commands/ is recommended. If
 not using rails, a similar structure would also be recommended.
