@@ -3,18 +3,22 @@ require 'spec_helper'
 describe SimpleService::Command do
 
   class ValidCommand < SimpleService::Command
-
     expects :foo, :bar
     returns :bar, :baz
-
     def call
       context.merge!(
         bar: 'modified',
         baz: 'blah'
       )
     end
-
   end
+
+  class InvalidReturnCommand < SimpleService::Command
+    expects :foo
+    returns :foo, :baz
+    def call; true; end
+  end
+
 
   class CallNotDefinedCommand < SimpleService::Command
   end
@@ -35,6 +39,12 @@ describe SimpleService::Command do
         expect {
           CallNotDefinedCommand.new.call
         }.to raise_error(SimpleService::CallNotDefinedError)
+      end
+
+      it 'when command attempts to return a key that doesnt exist' do
+        expect {
+          InvalidReturnCommand.new.call
+        }.to raise_error(SimpleService::ReturnKeyError)
       end
 
     end
