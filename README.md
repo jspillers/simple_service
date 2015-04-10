@@ -98,6 +98,9 @@ starting_context = {
 }
 modified_context = ProcessSomethingComplex.new(starting_context).call
 
+# alternatively, you can call directly from the service class
+modified_context = ProcessSomethingComplex.call(starting_context)
+
 modified_context[:modified_thing] # => 2
 ```
 
