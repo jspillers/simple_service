@@ -29,6 +29,12 @@ module SimpleService
       end
     end
 
+    # allow execution of the service from the class level for those
+    # that prefer that style
+    def self.call(context)
+      self.new(context).call
+    end
+
     private
 
     def with_validation
