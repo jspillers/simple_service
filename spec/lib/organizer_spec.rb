@@ -33,6 +33,12 @@ describe SimpleService::Organizer do
         ).to eql(foo: 'foo', bar: 'bar', baz: 'baz')
       end
 
+      it 'accepts string keys in context hash' do
+        expect(
+          TestOrganizer.new('foo' => 'foo').call
+        ).to eql(foo: 'foo', bar: 'bar', baz: 'baz')
+      end
+
     end
 
   end

@@ -9,6 +9,7 @@ module SimpleService
     def initialize(context={})
       @context = context
 
+      symbolize_context_keys
       setup_call_chain
       define_getters_and_setters
     end

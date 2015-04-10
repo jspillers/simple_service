@@ -34,6 +34,12 @@ module SimpleService
         end
       end
 
+      def symbolize_context_keys
+        context.keys.each do |key|
+          context[key.to_sym] = context.delete(key)
+        end
+      end
+
       def find_specified_return_keys
         if returns.nil? || returns.empty?
           context
