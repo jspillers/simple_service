@@ -4,7 +4,7 @@
 [![Code Climate](https://codeclimate.com/github/jspillers/simple_service/badges/gpa.svg)](https://codeclimate.com/github/jspillers/simple_service)
 [![Test Coverage](https://codeclimate.com/github/jspillers/simple_service/badges/coverage.svg)](https://codeclimate.com/github/jspillers/simple_service)
 [![Build Status](https://travis-ci.org/jspillers/simple_service.svg?branch=master)](https://travis-ci.org/jspillers/simple_service)
-[![RubyGems][gem_downloads_badge]][ruby_gems]
+![](http://ruby-gem-downloads-badge.herokuapp.com/simple_service)
 
 SimpleService gives you a way to organize service objects such that they adhere 
 to the single responsibility principle. Instead of writing large service objects 
