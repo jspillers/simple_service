@@ -1,8 +1,10 @@
 # SimpleService
 
+[![Gem Version](https://badge.fury.io/rb/simple_service.svg)](http://badge.fury.io/rb/simple_service)
 [![Code Climate](https://codeclimate.com/github/jspillers/simple_service/badges/gpa.svg)](https://codeclimate.com/github/jspillers/simple_service)
 [![Test Coverage](https://codeclimate.com/github/jspillers/simple_service/badges/coverage.svg)](https://codeclimate.com/github/jspillers/simple_service)
 [![Build Status](https://travis-ci.org/jspillers/simple_service.svg?branch=master)](https://travis-ci.org/jspillers/simple_service)
+[![RubyGems][gem_downloads_badge]][ruby_gems]
 
 SimpleService gives you a way to organize service objects such that they adhere 
 to the single responsibility principle. Instead of writing large service objects 
