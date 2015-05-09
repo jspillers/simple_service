@@ -30,13 +30,13 @@ describe SimpleService::Organizer do
       it 'returns the correct hash' do
         expect(
           TestOrganizer.new(foo: 'foo').call
-        ).to eql(foo: 'foo', bar: 'bar', baz: 'baz')
+        ).to eql(foo: 'foo', bar: 'bar', baz: 'baz', success: true)
       end
 
       it 'accepts string keys in context hash' do
         expect(
           TestOrganizer.new('foo' => 'foo').call
-        ).to eql(foo: 'foo', bar: 'bar', baz: 'baz')
+        ).to eql(foo: 'foo', bar: 'bar', baz: 'baz', success: true)
       end
 
     end
@@ -68,14 +68,14 @@ describe SimpleService::Organizer do
       it 'returns the entire context' do
         expect(
           TestOrganizerTwo.new(foo: 'foo', extra: 'extra').call
-        ).to eql(foo: 'foo', bar: 'bar', baz: 'baz', extra: 'extra')
+        ).to eql(foo: 'foo', bar: 'bar', baz: 'baz', extra: 'extra', success: true)
       end
 
     end
 
   end
 
-  describe 'service using getters and setters' do
+  context 'service using getters and setters' do
 
     class GetterSetterCommand < SimpleService::Command
       expects :foo, :bar
@@ -94,7 +94,40 @@ describe SimpleService::Organizer do
     it 'returns the correct hash' do
       expect(
         GetterSetterOrganizer.new(foo: 'baz', bar: 'bar').call
-      ).to eql({ baz: 'baz' })
+      ).to eql({ baz: 'baz', success: true })
+    end
+
+  end
+
+  context 'service with command that calls fail_and_return' do
+
+    class FailAndReturnErrorMessage < SimpleService::Command
+      def call
+        return failure!('something went wrong and we need to abort')
+      end
+    end
+
+    class ShouldNotRun < SimpleService::Command
+      def call
+        raise 'should not have gotten here'
+      end
+    end
+
+    class FailAndReturn < SimpleService::Organizer
+      commands FailAndReturnErrorMessage, ShouldNotRun
+    end
+
+    it 'returns a message' do
+      expect(FailAndReturn.call[:message]).to eql(
+        'something went wrong and we need to abort')
+    end
+
+    it 'returns success as false' do
+      expect(FailAndReturn.call[:success]).to eql(false)
+    end
+
+    it 'does not raise an exception' do
+      expect { FailAndReturn.call }.to_not raise_error
     end
 
   end

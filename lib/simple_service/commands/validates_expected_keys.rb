@@ -3,7 +3,7 @@ module SimpleService
 
     expects :expected_keys, :provided_keys
 
-    skip_validation true
+    skip_validation true # prevent infinite loop
 
     def call
       arguments_not_included = expected_keys.to_a - provided_keys.to_a

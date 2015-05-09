@@ -29,7 +29,7 @@ module SimpleService
           # other method to return only specific context keys
           define_method :call do
             call_method.bind(self).call
-            find_specified_return_keys
+            return_context_with_success_status
           end
         end
       end
@@ -38,6 +38,17 @@ module SimpleService
         context.keys.each do |key|
           context[key.to_sym] = context.delete(key)
         end
+      end
+
+      def return_context_with_success_status
+        _context = find_specified_return_keys
+
+        # only automatically set context[:success] on Organizers and only if its not already set
+        if !_context.has_key?(:success) && self.class.ancestors.include?(SimpleService::Organizer)
+          _context[:success] = true
+        end
+
+        _context
       end
 
       def find_specified_return_keys
@@ -69,12 +80,17 @@ module SimpleService
         self.class.instance_variable_get('@skip_validation')
       end
 
-      def all_specified_context_keys
-        (expects + returns).uniq
+      def all_context_keys
+        (expects + returns + ['message', 'success']).uniq
+      end
+
+      def failure!(message = nil)
+        context[:success] = false
+        context[:message] = message || 'There was a problem'
       end
 
       def define_getters_and_setters
-        all_specified_context_keys.each do |key|
+        all_context_keys.each do |key|
           self.class.class_eval do
 
             # getter

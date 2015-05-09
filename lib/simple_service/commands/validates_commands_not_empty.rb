@@ -3,7 +3,7 @@ module SimpleService
 
     expects :provided_commands
 
-    skip_validation true
+    skip_validation true # prevent infinite loop
 
     def call
       if provided_commands.nil? || provided_commands.empty?
