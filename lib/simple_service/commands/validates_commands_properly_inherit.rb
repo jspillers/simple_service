@@ -3,7 +3,7 @@ module SimpleService
 
     expects :provided_commands
 
-    skip_validation true
+    skip_validation true # prevent infinite loop
 
     def call
       # valid commands inherit from Command and do not inherit from service

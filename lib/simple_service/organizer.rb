@@ -6,7 +6,7 @@ module SimpleService
 
     attr_accessor :context
 
-    def initialize(context={})
+    def initialize(context = {})
       @context = context
 
       symbolize_context_keys
@@ -25,14 +25,16 @@ module SimpleService
     def call
       with_validation do |_commands|
         _commands.each do |command|
-          @context.merge!(command.new(context).call)
+          break if context[:success] == false
+          new_context = command.new(context).call
+          @context.merge!(new_context)
         end
       end
     end
 
     # allow execution of the service from the class level for those
     # that prefer that style
-    def self.call(context)
+    def self.call(context = {})
       self.new(context).call
     end
 

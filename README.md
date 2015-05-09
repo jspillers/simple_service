@@ -13,11 +13,13 @@ set of sequentially performed "Command" objects. Commands are very small classes
 that perform exactly one task. When properly designed, these command
 objects can be reused in multiple organizers minimizing code duplication.
 
-When an organizer is instantiated a hash of arguments is passed in. This hash 
-is referred to as the context.  The context hash is carried along throughout 
+When an organizer is instantiated a hash is passed in containing initial arguments. 
+This hash is referred to as the context.  The context hash is carried along throughout 
 the sequence of command executions and modified by each command. After a 
 successful run, the keys specified are returned. If keys are not specified, the 
 entire context hash is returned.
+
+# Setup
 
 First, setup an Organizer class. An Organizer needs the following things defined:
 
@@ -85,6 +87,27 @@ end
 
 class DoSomethingImportant < SimpleService::Command
   ...
+end
+```
+
+Within any command you can call ```#failure!``` and then return in order to
+abort execution of subsequent commands within the organizer.
+
+```ruby
+class DemonstrateFailure < SimpleService::Command
+  
+  expects :something
+
+  returns :good_stuff
+
+  def call
+    if good_stuff_happens
+      self.good_stuff = 'yeah, success!'
+    else
+      failure!('something not so good happened; no more commands should be called')
+    end
+  end
+
 end
 ```
 
