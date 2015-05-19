@@ -105,13 +105,21 @@ describe SimpleService::Organizer do
       ).to eql({ baz: 'baz', success: true })
     end
 
+    describe '.get_expects' do
+
+      it 'returns an array of expected keys' do
+        expect(GetterSetterOrganizer.get_expects.sort).to eql [:bar, :foo]
+      end
+
+    end
+
   end
 
-  context 'service with command that calls fail_and_return' do
+  context 'service with command that calls failure!' do
 
     class FailAndReturnErrorMessage < SimpleService::Command
       def call
-        return failure!('something went wrong and we need to abort')
+        failure!('something went wrong and we need to abort')
       end
     end
 
@@ -122,6 +130,7 @@ describe SimpleService::Organizer do
     end
 
     class FailAndReturn < SimpleService::Organizer
+      returns :something_not_set
       commands FailAndReturnErrorMessage, ShouldNotRun
     end
 
