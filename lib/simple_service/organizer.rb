@@ -25,8 +25,25 @@ module SimpleService
     def call
       with_validation do |_commands|
         _commands.each do |command|
+
+          # halt further command calls if success has been set to false
+          # in a previously called command
           break if context[:success] == false
-          new_context = command.new(context).call
+
+          # if command class defines "expects" then only feed the command
+          # those keys, otherwise just give it the entire context
+          _context = if command.get_expects.any?
+            {}.tap do |c|
+              command.get_expects.each {|key| c[key] = context[key] }
+            end
+          else
+            context
+          end
+
+          # instantiate and call the command
+          new_context = command.new(_context).call
+
+          # update the master context with the results of the command
           @context.merge!(new_context)
         end
       end
@@ -40,6 +57,10 @@ module SimpleService
 
     private
 
+    def failed?
+      !successful?
+    end
+
     def successful?
       context[:success] == true
     end
@@ -47,10 +68,18 @@ module SimpleService
     def with_validation
       add_validation_keys_to_context unless skip_validation
 
+      # ensure that the organizer and commands are setup correctly
+      # by injecting an internal service organizer into the stack of
+      # commands to be executed. Only include this if skip_validation is
+      # not set. Since both user defined and internal services use this code
+      # the skip_validation avoids an infinite loop
       _commands = skip_validation ? commands : [EnsureOrganizerIsValid] + commands
 
       yield(_commands)
 
+      # cleanup context keys that are used by the validation so the final
+      # return is clean even if the user does not define "returns" in their
+      # organizer
       remove_validation_keys_from_context unless skip_validation
     end
 

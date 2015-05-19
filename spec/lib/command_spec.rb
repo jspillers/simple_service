@@ -24,11 +24,13 @@ describe SimpleService::Command do
   end
 
   describe '.call' do
+
     it 'returns the correct keys when using class method' do
       expect(
         ValidCommand.call(foo: 'blah', bar: 'meh')
       ).to eql(bar: 'modified', baz: 'blah')
     end
+
   end
 
   describe '#call' do
@@ -79,6 +81,22 @@ describe SimpleService::Command do
       command = ValidCommand.new(foo: 'blah', bar: 'meh')
       command.foo = 'changed'
       expect(command.context).to eql({ foo: 'changed', bar: 'meh'})
+    end
+
+  end
+
+  describe '.get_expects' do
+
+    it 'returns an array of expected keys' do
+      expect(ValidCommand.get_expects.sort).to eql([:foo, :bar].sort)
+    end
+
+  end
+
+  describe '.get_returns' do
+
+    it 'returns an array of keys to return' do
+      expect(ValidCommand.get_returns.sort).to eql([:baz, :bar].sort)
     end
 
   end

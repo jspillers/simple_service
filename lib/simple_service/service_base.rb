@@ -6,8 +6,16 @@ module SimpleService
         @expects = args
       end
 
+      def get_expects
+        @expects || []
+      end
+
       def returns(*args)
         @returns = args
+      end
+
+      def get_returns
+        @returns || []
       end
 
       def skip_validation(skip=true)
@@ -57,7 +65,7 @@ module SimpleService
 
         # only automatically set context[:success] on Organizers and only if its not already set
         # by a command calling #failure!
-        if !_context.has_key?(:success) && self.class.ancestors.include?(SimpleService::Organizer)
+        if !_context.has_key?(:success) && organizer?
           _context[:success] = true
         end
 
@@ -65,7 +73,7 @@ module SimpleService
       end
 
       def find_specified_return_keys
-        if returns.nil? || returns.empty?
+        if returns.nil? || returns.empty? || (organizer? && failed?)
           context
         else
           returns.inject({}) do |to_return, return_param|
@@ -82,11 +90,11 @@ module SimpleService
       end
 
       def expects
-        self.class.instance_variable_get('@expects') || []
+        self.class.get_expects
       end
 
       def returns
-        self.class.instance_variable_get('@returns') || []
+        self.class.get_returns
       end
 
       def skip_validation
@@ -95,6 +103,10 @@ module SimpleService
 
       def all_context_keys
         (expects + returns + ['message', 'success']).uniq
+      end
+
+      def organizer?
+        self.class.ancestors.include?(SimpleService::Organizer)
       end
 
       def failure!(message = nil)
