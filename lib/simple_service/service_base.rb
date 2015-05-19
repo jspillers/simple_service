@@ -13,10 +13,24 @@ module SimpleService
       def skip_validation(skip=true)
         @skip_validation = skip
       end
+
+      # allow execution of the service or commands from the
+      # class level for those that prefer that style
+      def call(context = {})
+        new(context).call
+      end
+
     end
 
     module InstanceMethods
 
+      # sets up an "after" filter for #call
+      #
+      # allows user to implement #call in their individual
+      # command and organizer # classes without having to
+      # rely on super or executing another other method
+      # to do post #call housekeeping such as returning
+      # only specific context keys
       def setup_call_chain
         self.class.class_eval do
 
@@ -24,9 +38,7 @@ module SimpleService
           call_method = instance_method(:call)
 
           # redefine the call method, execute the existing call method object,
-          # and then run return key checking... allows user to implement call in
-          # their individual command classes without having to call super or any
-          # other method to return only specific context keys
+          # and then run return key checking...
           define_method :call do
             call_method.bind(self).call
             return_context_with_success_status
@@ -44,6 +56,7 @@ module SimpleService
         _context = find_specified_return_keys
 
         # only automatically set context[:success] on Organizers and only if its not already set
+        # by a command calling #failure!
         if !_context.has_key?(:success) && self.class.ancestors.include?(SimpleService::Organizer)
           _context[:success] = true
         end

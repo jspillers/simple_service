@@ -23,6 +23,14 @@ describe SimpleService::Command do
   class CallNotDefinedCommand < SimpleService::Command
   end
 
+  describe '.call' do
+    it 'returns the correct keys when using class method' do
+      expect(
+        ValidCommand.call(foo: 'blah', bar: 'meh')
+      ).to eql(bar: 'modified', baz: 'blah')
+    end
+  end
+
   describe '#call' do
 
     context 'when #returns is not empty' do

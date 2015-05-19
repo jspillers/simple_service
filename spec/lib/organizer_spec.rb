@@ -26,6 +26,14 @@ describe SimpleService::Organizer do
       commands TestCommandOne, TestCommandTwo
     end
 
+    describe '.call' do
+      it 'returns the correct hash' do
+        expect(
+          TestOrganizer.call(foo: 'foo')
+        ).to eql(foo: 'foo', bar: 'bar', baz: 'baz', success: true)
+      end
+    end
+
     describe '#call' do
       it 'returns the correct hash' do
         expect(

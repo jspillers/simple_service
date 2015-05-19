@@ -40,6 +40,10 @@ module SimpleService
 
     private
 
+    def successful?
+      context[:success] == true
+    end
+
     def with_validation
       add_validation_keys_to_context unless skip_validation
 
