@@ -23,6 +23,7 @@ module SimpleService
     end
 
     def call
+      # underscores used to disambiguate local vars from methods with the same name
       with_validation do |_commands|
         _commands.each do |command|
 
@@ -58,6 +59,7 @@ module SimpleService
     private
 
     def with_validation
+      # don't mess with the context if we are doing internal validation
       add_validation_keys_to_context unless skip_validation
 
       # ensure that the organizer and commands are setup correctly
