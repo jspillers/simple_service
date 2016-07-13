@@ -6,12 +6,12 @@
 [![Build Status](https://travis-ci.org/jspillers/simple_service.svg?branch=master)](https://travis-ci.org/jspillers/simple_service)
 <!--![](http://ruby-gem-downloads-badge.herokuapp.com/jspillers/simple_service)-->
 
-SimpleService gives you a way to organize service objects such that they adhere 
-to the single responsibility principle. Instead of writing large service objects 
-that perform multiple tasks, SimpleService allows you to breakdown tasks into a 
-set of sequentially performed "Command" objects. Commands are very small classes 
-that perform exactly one task. When properly designed, these command
-objects can be reused in multiple organizers minimizing code duplication.
+SimpleService provides a way to organize Ruby service objects into highly reusable
+and composable classes that are easy to implement and easy to read.  Instead of 
+writing large service objects that perform multiple tasks, SimpleService 
+helps you breakdown tasks into a set of sequentially performed "Command" objects. 
+Commands are very small classes that perform exactly one task. When properly designed, 
+these command objects can be reused in multiple organizers minimizing code duplication.
 
 When an organizer is instantiated a hash is passed in containing initial arguments. 
 This hash is referred to as the context.  The context hash is carried along throughout 
