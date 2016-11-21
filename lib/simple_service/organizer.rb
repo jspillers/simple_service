@@ -6,8 +6,8 @@ module SimpleService
 
     attr_accessor :context
 
-    def initialize(context = {})
-      @context = context
+    def initialize(_context = {})
+      @context = validate_context(_context)
 
       symbolize_context_keys
       setup_call_chain
@@ -41,11 +41,16 @@ module SimpleService
             context
           end
 
+          # also merge any optional keys
+          command.get_optional.each do |key|
+            _context[key] = context[key]
+          end
+
           # instantiate and call the command
-          new_context = command.new(_context).call
+          resulting_context = command.new(_context).call
 
           # update the master context with the results of the command
-          @context.merge!(new_context)
+          @context.merge!(resulting_context)
         end
       end
     end
@@ -57,6 +62,15 @@ module SimpleService
     end
 
     private
+
+    def validate_context(_context)
+      unless _context.class == Hash
+        raise InvalidArgumentError,
+          "Hash required as argument, but was given a #{_context.class}"
+      end
+
+      _context
+    end
 
     def with_validation
       # don't mess with the context if we are doing internal validation

@@ -4,10 +4,11 @@ describe SimpleService::Command do
 
   class ValidCommand < SimpleService::Command
     expects :foo, :bar
+    optional :stuff
     returns :bar, :baz
     def call
       context.merge!(
-        bar: 'modified',
+        bar: ['modified', self.stuff].compact.join(' '),
         baz: 'blah'
       )
     end
@@ -29,6 +30,12 @@ describe SimpleService::Command do
       expect(
         ValidCommand.call(foo: 'blah', bar: 'meh')
       ).to eql(bar: 'modified', baz: 'blah')
+    end
+
+    it 'provides optional arguments as getters' do
+      expect(
+        ValidCommand.call(foo: 'blah', bar: 'meh', stuff: 'something')
+      ).to eql(bar: 'modified something', baz: 'blah')
     end
 
   end

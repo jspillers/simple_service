@@ -10,6 +10,14 @@ module SimpleService
         @expects || []
       end
 
+      def optional(*args)
+        @optional = args
+      end
+
+      def get_optional
+        @optional || []
+      end
+
       def returns(*args)
         @returns = args
       end
@@ -101,6 +109,10 @@ module SimpleService
         self.class.get_expects
       end
 
+      def optional
+        self.class.get_optional
+      end
+
       def returns
         self.class.get_returns
       end
@@ -110,7 +122,7 @@ module SimpleService
       end
 
       def all_context_keys
-        (expects + returns + ['message', 'success']).uniq
+        (expects + optional + returns + ['message', 'success']).uniq
       end
 
       def organizer?

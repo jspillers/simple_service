@@ -2,26 +2,29 @@ require 'spec_helper'
 
 describe SimpleService::Organizer do
 
-  context 'classes with expects and returns' do
+  context 'classes with .expects, .optional, and .returns' do
 
     class TestCommandOne < SimpleService::Command
       expects :foo
+      optional :blah
       returns :foo, :bar
       def call
-        context.merge!(bar: 'bar')
+        context.merge!(bar: ['bar', self.blah].compact.join(' '))
       end
     end
 
     class TestCommandTwo < SimpleService::Command
       expects :foo, :bar
+      optional :blarg
       returns :foo, :bar, :baz
       def call
-        context.merge!(baz: 'baz')
+        context.merge!(baz: ['baz', self.blarg].compact.join(' '))
       end
     end
 
     class TestOrganizer < SimpleService::Organizer
       expects :foo
+      optional :blah, :blarg
       returns :foo, :bar, :baz
       commands TestCommandOne, TestCommandTwo
     end
@@ -31,6 +34,12 @@ describe SimpleService::Organizer do
         expect(
           TestOrganizer.call(foo: 'foo')
         ).to eql(foo: 'foo', bar: 'bar', baz: 'baz', success: true)
+      end
+
+      it 'returns the correct hash when optional arguments provided' do
+        expect(
+          TestOrganizer.call(foo: 'foo', blah: 'blah', blarg: 'blarg')
+        ).to eql(foo: 'foo', bar: 'bar blah', baz: 'baz blarg', success: true)
       end
     end
 
@@ -147,6 +156,26 @@ describe SimpleService::Organizer do
       expect { FailAndReturn.call }.to_not raise_error
     end
 
+  end
+
+  context 'when arguments are not a hash' do
+
+    class DoNothingCommand < SimpleService::Command
+      def call
+        'do nothing'
+      end
+    end
+
+    class DoNothingOrganizer < SimpleService::Organizer
+      commands DoNothingCommand
+    end
+
+    it 'raises an error' do
+      expect { DoNothingOrganizer.new('not a hash').call }.to raise_error(
+        SimpleService::InvalidArgumentError,
+        'Hash required as argument, but was given a String'
+      )
+    end
   end
 
 end
