@@ -1,8 +1,13 @@
 module SimpleService
 
+  # TODO: move context logic here?
   module Context
 
     def success?
+
+    end
+
+    def success!
 
     end
 

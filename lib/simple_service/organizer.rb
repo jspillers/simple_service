@@ -28,8 +28,8 @@ module SimpleService
         _commands.each do |command|
 
           # halt further command calls if success has been set to false
-          # in a previously called command
-          break if context[:success] == false
+          # in a previously called command or halt is set
+          break if context[:success] == false || context[:halt] == true
 
           # if command class defines "expects" then only feed the command
           # those keys, otherwise just give it the entire context

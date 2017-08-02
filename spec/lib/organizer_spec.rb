@@ -158,6 +158,41 @@ describe SimpleService::Organizer do
 
   end
 
+  context 'service with command that calls success!' do
+
+    class SuccessAndReturnMessage < SimpleService::Command
+      returns :something
+      def call
+        context[:something] = 'yes!'
+        success!('success called prior to all commands being run')
+      end
+    end
+
+    class SuccessCalledThisShouldNotRun < SimpleService::Command
+      def call
+        raise 'should not have gotten here'
+      end
+    end
+
+    class SucceedAndReturn < SimpleService::Organizer
+      returns :something
+      commands SuccessAndReturnMessage, SuccessCalledThisShouldNotRun
+    end
+
+    it 'returns a message' do
+      expect(SucceedAndReturn.call[:message]).to eql(
+        'success called prior to all commands being run')
+    end
+
+    it 'returns success as true' do
+      expect(SucceedAndReturn.call[:success]).to eql(true)
+    end
+
+    it 'does not raise an exception' do
+      expect { SucceedAndReturn.call }.to_not raise_error
+    end
+  end
+
   context 'when arguments are not a hash' do
 
     class DoNothingCommand < SimpleService::Command

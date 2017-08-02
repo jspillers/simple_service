@@ -44,6 +44,10 @@ module SimpleService
         !successful?
       end
 
+      def halted?
+        context.has_key?(:halt) || context[:halt] == true
+      end
+
       def successful?
         !context.has_key?(:success) || context[:success] == true
       end
@@ -89,7 +93,7 @@ module SimpleService
       end
 
       def find_specified_return_keys
-        if returns.nil? || returns.empty? || failed?
+        if returns.nil? || returns.empty? || failed? || halted?
           context
         else
           returns.inject({}) do |to_return, return_param|
@@ -131,7 +135,14 @@ module SimpleService
 
       def failure!(message = nil)
         context[:success] = false
+        context[:halt] = true
         context[:message] = message || 'There was a problem'
+      end
+
+      def success!(message = nil)
+        context[:success] = true
+        context[:halt] = true
+        context[:message] = message || 'Success! Returned early'
       end
 
       def define_getters_and_setters
