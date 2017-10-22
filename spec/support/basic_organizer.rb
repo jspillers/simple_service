@@ -1,19 +1,9 @@
-require_relative 'step_one'
-require_relative 'step_two'
+require_relative 'command_one'
+require_relative 'command_two'
 
 class BasicOrganizer
   include SimpleService::Organizer
 
-  expects :foo, :bar
-
-  optional :blah
-
-  commands StepOne,
-           StepTwo,
-           :step_three
-
-  def step_three(combined_foo_bar:)
-    success(final_result: combined_foo_bar)
-  end
+  commands CommandOne, CommandTwo
 end
 

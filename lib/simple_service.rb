@@ -1,3 +1,4 @@
+require 'simple_service/execution_hooks'
 require 'simple_service/service_base'
 require 'simple_service/command'
 require 'simple_service/organizer'
