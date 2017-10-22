@@ -1,5 +1,5 @@
 class CommandOne
-  include SimpleService::Organizer
+  include SimpleService
 
   command :modify_foo_bar
 

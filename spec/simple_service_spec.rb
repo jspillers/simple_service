@@ -12,9 +12,24 @@ RSpec.describe SimpleService do
     }
   end
 
-  it 'returns a result object' do
-    result = BasicOrganizer.call(params)
-    expect(result).to be_a SimpleService::Result
+  context '#call is successful:' do
+    let(:result) do
+      BasicOrganizer.call(params)
+    end
+
+    it 'returns a result object' do
+      expect(result).to be_a SimpleService::Result
+    end
+
+    it 'returns success' do
+      expect(result.success?).to eq true
+    end
+
+    it 'returns the correct result value' do
+      expect(result.value).to eq(
+        combined_foo_bar: 'combined modified FOO modified BAR'
+      )
+    end
   end
 end
 

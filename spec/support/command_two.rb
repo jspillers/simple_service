@@ -1,5 +1,5 @@
 class CommandTwo
-  include SimpleService::Organizer
+  include SimpleService
 
   command :combine_foo_bar
 
