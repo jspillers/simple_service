@@ -1,11 +1,21 @@
 require 'simple_service/result'
-require 'simple_service/exceptions'
+require 'simple_service/configuration'
 require 'simple_service/version'
 
 module SimpleService
   def self.included(klass)
     klass.extend ClassMethods
     klass.include InstanceMethods
+    self.configure
+  end
+
+  class << self
+    attr_accessor :configuration
+  end
+
+  def self.configure
+    self.configuration ||= Configuration.new
+    yield(configuration) if block_given?
   end
 
   module ClassMethods
@@ -46,8 +56,7 @@ module SimpleService
         end
 
         if command_output.is_a?(Result)
-          result.value = command_output.value
-          result.recorded_commands += command_output.recorded_commands
+          result.append_result(command_output)
         end
 
         break if result.failure?
@@ -57,16 +66,11 @@ module SimpleService
     end
 
     def success(result_value)
-      record_result(result_value, true)
+      result.success!(self.class, @current_command, result_value)
     end
 
     def failure(result_value)
-      record_result(result_value, false)
-    end
-
-    def record_result(result_value, success)
-      result.record_command(@current_command, success)
-      result.value = result_value
+      result.failure!(self.class, @current_command, result_value)
     end
   end
 end
