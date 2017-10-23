@@ -1,5 +1,5 @@
 require 'spec_helper'
-require_relative 'support/basic_organizer'
+require_relative 'support/basic_service'
 
 RSpec.describe SimpleService do
 

@@ -6,52 +6,46 @@
 [![Build Status](https://travis-ci.org/jspillers/simple_service.svg?branch=master)](https://travis-ci.org/jspillers/simple_service)
 <!--![](http://ruby-gem-downloads-badge.herokuapp.com/jspillers/simple_service)-->
 
-SimpleService provides a way to organize Ruby service objects into highly reusable
-and composable classes that are easy to implement and easy to read.  Instead of 
-writing large service objects that perform multiple tasks, SimpleService 
-helps you breakdown tasks into a set of sequentially performed "Command" objects. 
-Commands are very small classes that perform exactly one task. When properly designed, 
-these command objects can be reused in multiple organizers minimizing code duplication.
-
-When an organizer is instantiated a hash is passed in containing initial arguments. 
-This hash is referred to as the context.  The context hash is carried along throughout 
-the sequence of command executions and modified by each command. After a 
-successful run, the keys specified are returned. If keys are not specified, the 
-entire context hash is returned.
+SimpleService facilitates the creation of Ruby service objects into highly discreet, reusable,
+and composable units of business logic. The core concept of SimpleService is the definition of 
+"Command" objects/methods. Commands are very small classes or methods that perform exactly one task. 
+When properly designed, these command objects can be composited together or even nested to create
+complex flows.
 
 # Setup
 
-First, setup an Organizer class. An Organizer needs the following things defined:
-
-  * expects: keys that are required to be passed into initialize when an 
-    instance of organizer is created. If not defined the organizer will 
-    accept arbitrary arguments.
-  * returns: keys that will be returned when the organizer has called all of 
-    its commands
-  * commands: classes that define all the steps that the organizer will call. 
-    The organizer will execute #call on each command in order and the context 
-    hash is passed to each of these commands. Any keys within the context that 
-    are modified will be merged back into the organizer and passed along to the 
-    next command.
+Basic Usage:
 
 ```ruby
-class ProcessSomethingComplex < SimpleService::Organizer
+require 'simple_service'
 
-  # optional - ensures the following keys are provided during instantiation
-  # leave out to accept any arguments/keys
-  expects :something, :another_thing
+class DoStuff
+  include SimpleService
 
-  # optional - specifies which keys get returned after #call is executed on
-  # an organizer instance
-  returns :modified_thing
+  commands :do_something_important, :do_another_important_thing
 
-  # what steps comprise this service
-  # #call will be executed on an instance of each class in sequence
-  commands DoSomethingImportant, DoAnotherStep
+  def do_something_important(name:)
+    puts 'important stuff...'
+    message = "hey #{name}, we are doing something important!"
+    success(message: message)
+  end
 
+  def do_another_important_thing(message:)
+    puts 'doing another important thing'
+    new_message = "#{message} Why are we doing this?"
+    success(the_final_result: new_message)
+  end
 end
+
+DoStuff.call(name: 'Alice')
+
 ```
 
+```ruby
+class ProcessSomethingComplex
+  commands DoSomethingImportant, DoAnotherStep
+end
+```
 Next, define all command classes that make up the service. Each should inherit 
 from SimpleService::Command and define similar things to the organizer:
 

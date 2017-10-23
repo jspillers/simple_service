@@ -1,7 +1,7 @@
 require_relative 'command_one'
 require_relative 'command_two'
 
-class BasicOrganizer
+class BasicService
   include SimpleService
 
   command :command_one
