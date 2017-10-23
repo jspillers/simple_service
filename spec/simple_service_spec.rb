@@ -13,7 +13,13 @@ RSpec.describe SimpleService do
   end
 
   let(:result) do
-    BasicOrganizer.call(params)
+    BasicService.call(params)
+  end
+
+  before do
+    SimpleService.configure do |config|
+      config.verbose_tracking = false
+    end
   end
 
   context '#call is successful' do
@@ -34,7 +40,7 @@ RSpec.describe SimpleService do
 
   context '#call that fails on step one' do
     let(:result) do
-      BasicOrganizer.call(params.merge(command_one_success: false))
+      BasicService.call(params.merge(command_one_success: false))
     end
 
     it 'returns a result object' do
@@ -55,7 +61,7 @@ RSpec.describe SimpleService do
 
   context '#call that fails on step two' do
     it 'returns the correct result value' do
-      result = BasicOrganizer.call(params.merge(command_two_success: false))
+      result = BasicService.call(params.merge(command_two_success: false))
       expect(result.value).to eq(
         message: 'stuff went wrong with command two'
       )
@@ -67,12 +73,12 @@ RSpec.describe SimpleService do
       expect(result.recorded_commands).to eq(
         [
           {
-            class_name: 'BasicOrganizer',
+            class_name: 'BasicService',
             command_name: :command_one,
             success: true,
           },
           {
-            class_name: 'BasicOrganizer',
+            class_name: 'BasicService',
             command_name: :command_two,
             success: true,
           },
@@ -98,7 +104,7 @@ RSpec.describe SimpleService do
       expect(result.recorded_commands).to eq(
         [
           {
-            class_name: 'BasicOrganizer',
+            class_name: 'BasicService',
             command_name: :command_one,
             received_args: {
               foo: 'asdf',
@@ -114,7 +120,7 @@ RSpec.describe SimpleService do
             },
           },
           {
-            class_name: 'BasicOrganizer',
+            class_name: 'BasicService',
             command_name: :command_two,
             received_args: {
               foo: 'FOO',
