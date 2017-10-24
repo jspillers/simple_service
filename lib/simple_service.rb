@@ -20,7 +20,13 @@ module SimpleService
 
   module ClassMethods
     def call(**kwargs)
-      self.new.call(kwargs)
+      service = self.new
+
+      if service.method(:call).arity.zero?
+        service.call
+      else
+        service.call(kwargs)
+      end
     end
 
     def command(command_name)
@@ -43,8 +49,8 @@ module SimpleService
       self.class.instance_variable_get('@commands')
     end
 
-    def call(**kwargs)
-      result.value = kwargs
+    def call(kwargs)
+      result.value = kwargs.is_a?(Result) ? kwargs.value : kwargs
 
       commands.each do |command|
         @current_command = command

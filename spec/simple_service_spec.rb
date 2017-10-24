@@ -1,5 +1,6 @@
 require 'spec_helper'
 require_relative 'support/basic_service'
+require_relative 'support/looping_service'
 
 RSpec.describe SimpleService do
 
@@ -65,6 +66,16 @@ RSpec.describe SimpleService do
       expect(result.value).to eq(
         message: 'stuff went wrong with command two'
       )
+    end
+  end
+
+  context 'LoopingService' do
+    it 'returns a result object' do
+      expect(LoopingService.call(count: 0)).to be_a SimpleService::Result
+    end
+
+    it 'returns a result object' do
+      expect(LoopingService.call(count: 0).value).to eq(count: 3)
     end
   end
 

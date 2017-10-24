@@ -122,6 +122,38 @@ result.success? #=> true
 result.value #=> {:seven=>7}
 ```
 
+If you would like your service to process an enumerable you can override `#call`
+on your service object. Invoking `#super` in your definition and passing along 
+the appropriate arguments will allow your command chain to proceed as normal, but
+called multiple times via a loop. The Result object returned from each call to `#super`
+can be passed in as an argument to the next iteration or you can collect the result objects
+yourself and then do any post processing required.
+
+```ruby
+require 'rubygems'
+require 'simple_service'
+
+class LoopingService
+  include SimpleService
+
+  commands :add_one
+
+  def call(kwargs)
+    count = kwargs
+
+    3.times do
+      count = super(count)
+    end
+
+    count
+  end
+
+  def add_one(count:)
+    success(count: count + 1)
+  end
+end
+```
+
 If you are using this with a Rails app, placing top level services in 
 `app/services/` and all nested commands in `app/services/commands/` is 
 recommended. Even if not using rails, a similar structure also works well.
