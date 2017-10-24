@@ -126,12 +126,6 @@ If you are using this with a Rails app, placing top level services in
 app/services/ and all nested commands in app/services/commands/ is recommended. If
 not using rails, a similar structure would also be recommended.
 
-For further examination of usage, here are a few examples:
-
-* [hello world example](example/hello_world.rb)
-* [nested services example](example/nested_services.rb)
-* [override #call on the organizer](example/override_organizer_call_method.rb)
-
 ## Contributing
 
 1. Fork it
