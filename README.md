@@ -86,7 +86,7 @@ result.value #=> {:message=>"hey Bob, things went wrong."}
 
 You can also use ClassNames as commands and to organize them into other files:
 
-```
+```ruby 
 require 'rubygems'
 require 'simple_service'
 
@@ -123,8 +123,8 @@ result.value #=> {:seven=>7}
 ```
 
 If you are using this with a Rails app, placing top level services in 
-app/services/ and all nested commands in app/services/commands/ is recommended. If
-not using rails, a similar structure would also be recommended.
+`app/services/` and all nested commands in `app/services/commands/` is 
+recommended. Even if not using rails, a similar structure also works well.
 
 ## Contributing
 
