@@ -1,19 +1,20 @@
-require_relative 'command_one'
-require_relative 'command_two'
+require_relative 'modify_foo_bar'
+require_relative 'combine_foo_bar'
 
 class BasicService
   include SimpleService
 
-  command :command_one
-  command :command_two
-  commands CommandOne, CommandTwo
+  commands :upcase_foo,
+           :upcase_bar,
+           ModifyFooBar,
+           CombineFooBar
 
-  def command_one(**kwargs)
-    success(kwargs.merge(foo: 'FOO'))
+  def upcase_foo(**kwargs)
+    success(kwargs.merge(foo: kwargs[:foo].upcase))
   end
 
-  def command_two(**kwargs)
-    success(kwargs.merge(bar: 'BAR'))
+  def upcase_bar(**kwargs)
+    success(kwargs.merge(bar: kwargs[:bar].upcase))
   end
 end
 

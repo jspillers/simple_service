@@ -1,9 +1,7 @@
-class CommandOne
+class ModifyFooBar
   include SimpleService
 
-  command :modify_foo_bar
-
-  def modify_foo_bar(foo:, bar:, command_one_success:, command_two_success:)
+  def call(foo:, bar:, command_one_success:, command_two_success:)
     modified_foo = "modified #{foo}"
     modified_bar = "modified #{bar}"
 

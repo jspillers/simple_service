@@ -3,7 +3,7 @@ class LoopingService
 
   commands :add_one
 
-  def call(kwargs)
+  def self.call(kwargs)
     count = kwargs
 
     3.times do

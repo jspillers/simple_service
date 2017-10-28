@@ -1,13 +1,14 @@
 require 'spec_helper'
 require_relative 'support/basic_service'
 require_relative 'support/looping_service'
+require_relative 'support/empty_service'
 
 RSpec.describe SimpleService do
 
   let(:params) do
     {
-      foo: 'asdf',
-      bar: 'qwer',
+      foo: 'foo',
+      bar: 'bar',
       command_one_success: true,
       command_two_success: true,
     }
@@ -79,28 +80,34 @@ RSpec.describe SimpleService do
     end
   end
 
+  context 'improperly configured service class' do
+    it 'raises error when no commands or call defined' do
+      expect { EmptyService.call }.to raise_error(/No commands defined for EmptyService/)
+    end
+  end
+
   context 'record commands' do
     it 'records normal command execution' do
       expect(result.recorded_commands).to eq(
         [
           {
             class_name: 'BasicService',
-            command_name: :command_one,
+            command_name: :upcase_foo,
             success: true,
           },
           {
             class_name: 'BasicService',
-            command_name: :command_two,
+            command_name: :upcase_bar,
             success: true,
           },
           {
-            class_name: 'CommandOne',
-            command_name: :modify_foo_bar,
+            class_name: 'ModifyFooBar',
+            command_name: :call,
             success: true,
           },
           {
-            class_name: 'CommandTwo',
-            command_name: :combine_foo_bar,
+            class_name: 'CombineFooBar',
+            command_name: :call,
             success: true,
           },
         ]
@@ -116,26 +123,26 @@ RSpec.describe SimpleService do
         [
           {
             class_name: 'BasicService',
-            command_name: :command_one,
+            command_name: :upcase_foo,
             received_args: {
-              foo: 'asdf',
-              bar: 'qwer',
+              foo: 'foo',
+              bar: 'bar',
               command_one_success: true,
               command_two_success: true
             },
             success: {
               foo: 'FOO',
-              bar: 'qwer',
+              bar: 'bar',
               command_one_success: true,
               command_two_success: true,
             },
           },
           {
             class_name: 'BasicService',
-            command_name: :command_two,
+            command_name: :upcase_bar,
             received_args: {
               foo: 'FOO',
-              bar: 'qwer',
+              bar: 'bar',
               command_one_success: true,
               command_two_success: true
             },
@@ -147,8 +154,8 @@ RSpec.describe SimpleService do
             },
           },
           {
-            class_name: 'CommandOne',
-            command_name: :modify_foo_bar,
+            class_name: 'ModifyFooBar',
+            command_name: :call,
             received_args: {
               foo: 'FOO',
               bar: 'BAR',
@@ -162,8 +169,8 @@ RSpec.describe SimpleService do
             },
           },
           {
-            class_name: 'CommandTwo',
-            command_name: :combine_foo_bar,
+            class_name: 'CombineFooBar',
+            command_name: :call,
             received_args: {
               modified_foo: 'modified FOO',
               modified_bar: 'modified BAR',
