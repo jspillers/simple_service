@@ -19,16 +19,6 @@ module SimpleService
   end
 
   module ClassMethods
-    def call(**kwargs)
-      service = self.new
-
-      if service.method(:call).arity.zero?
-        service.call
-      else
-        service.call(kwargs)
-      end
-    end
-
     def command(command_name)
       @commands ||= []
       @commands << command_name
@@ -38,6 +28,51 @@ module SimpleService
       @commands ||= []
       @commands += args
     end
+
+    def call(kwargs={})
+      service = self.new
+
+      # if kwargs is a result obj then pull its hash out via #value
+      service.result.value = kwargs.is_a?(Result) ? kwargs.value : kwargs
+
+      get_commands(service).each do |cmnd|
+        service = execute_command(cmnd, service)
+        break if service.result.failure?
+      end
+
+      service.result
+    end
+
+    def get_commands(service)
+      if !@commands.nil? && @commands.any?
+        @commands
+      elsif service.respond_to?(:call)
+        [:call]
+      else
+        raise "No commands defined for #{self.to_s}, define at least one " \
+          'command or implement the #call method'
+      end
+    end
+
+    def execute_command(cmnd, service)
+      service.current_command = cmnd
+
+      command_output = if cmnd.is_a?(Class)
+        cmnd.call(service.result.value)
+      elsif cmnd.is_a?(Symbol)
+        if service.method(cmnd).arity.zero?
+          service.public_send(cmnd)
+        else
+          service.public_send(cmnd, service.result.value)
+        end
+      end
+
+      if command_output.is_a?(Result)
+        service.result.append_result(command_output)
+      end
+
+      service
+    end
   end
 
   module InstanceMethods
@@ -45,38 +80,24 @@ module SimpleService
       @result ||= Result.new
     end
 
-    def commands
-      self.class.instance_variable_get('@commands')
+    def current_command
+      @current_command
     end
 
-    def call(kwargs)
-      result.value = kwargs.is_a?(Result) ? kwargs.value : kwargs
+    def current_command=(cmnd)
+      @current_command = cmnd
+    end
 
-      commands.each do |command|
-        @current_command = command
-
-        command_output = if command.is_a?(Class)
-          command.new.call(result.value)
-        elsif command.is_a?(Symbol)
-          method(command).call(result.value)
-        end
-
-        if command_output.is_a?(Result)
-          result.append_result(command_output)
-        end
-
-        break if result.failure?
-      end
-
-      result
+    def commands
+      self.class.instance_variable_get('@commands') || []
     end
 
     def success(result_value)
-      result.success!(self.class, @current_command, result_value)
+      result.success!(self.class, current_command, result_value)
     end
 
     def failure(result_value)
-      result.failure!(self.class, @current_command, result_value)
+      result.failure!(self.class, current_command, result_value)
     end
   end
 end

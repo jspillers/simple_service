@@ -1,9 +1,7 @@
-class CommandTwo
+class CombineFooBar
   include SimpleService
 
-  command :combine_foo_bar
-
-  def combine_foo_bar(modified_foo:, modified_bar:, command_two_success:)
+  def call(modified_foo:, modified_bar:, command_two_success:)
     combined_foo_bar = "combined #{modified_foo} #{modified_bar}"
 
     if command_two_success

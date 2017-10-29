@@ -12,6 +12,18 @@ and composable units of business logic. The core concept of SimpleService is the
 When properly designed, these command objects can be composited together or even nested to create
 complex flows.
 
+# 2.0.0 update notes
+
+This update is a major refactor from previous 1.x.x versions. After revisiting this codebase I decided that 
+I needed to make SimpleService actually simple in both use and implementation. The gem has now been paired down
+to about 150 lines of code.
+
+* All functionality is added to your service class via module inclusion instead of inheritance
+* The concept of an Organizer has been removed
+* The DSL for defining interfaces has been removed in favor of simple keyword arguments
+* `#success` or `#failure` must be called within each command or call method
+* Services are always invoked via the class method `.call`. Previously you could use either `#call` or `.call`.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -93,21 +105,24 @@ require 'simple_service'
 class CommandOne
   include SimpleService
 
-  command :add_stuff
-
-  def add_stuff(one:, two:)
-    success(three: one + two)
+  def call(one:, two:)
+    if one == 1 && two == 2
+      success(three: one + two)
+    else
+      failure(something: 'went wrong')
+    end
   end
 end
 
 class CommandTwo
   include SimpleService
 
-  command :add_more_stuff
-
-  def add_more_stuff(three:)
-    binding.pry
-    success(seven: three + 4)
+  def call(three:)
+    if three == 3
+      success(seven: three + 4)
+    else
+      failure(another_thing: 'went wrong')
+    end
   end
 end
 
@@ -120,6 +135,10 @@ end
 result = DoNestedStuff.call(one: 1, two: 2)
 result.success? #=> true
 result.value #=> {:seven=>7}
+
+result = DoNestedStuff.call(one: 2, two: 1)
+result.success? #=> false
+result.value #=> {something: 'went wrong'}
 ```
 
 If you would like your service to process an enumerable you can override `#call`
@@ -138,7 +157,7 @@ class LoopingService
 
   commands :add_one
 
-  def call(kwargs)
+  def self.call(count:)
     count = kwargs
 
     3.times do
@@ -152,6 +171,10 @@ class LoopingService
     success(count: count + 1)
   end
 end
+
+result = LoopingService.call(count: 0) 
+result.is_a?(SimpleService::Result) #=> true
+result.value #=> {count: 3}
 ```
 
 If you are using this with a Rails app, placing top level services in 
