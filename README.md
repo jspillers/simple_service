@@ -96,7 +96,9 @@ result.failure? #=> true
 result.value #=> {:message=>"hey Bob, things went wrong."}
 ```
 
-You can also use ClassNames as commands and to organize them into other files:
+You can also use ClassNames as commands and to organize them into other files. If `#call` is
+defined and no other commands are defined via `command` or `commands` then SimpleService will
+automatically use `#call` as the default command
 
 ```ruby 
 require 'rubygems'
@@ -141,7 +143,7 @@ result.success? #=> false
 result.value #=> {something: 'went wrong'}
 ```
 
-If you would like your service to process an enumerable you can override `#call`
+If you would like your service to process an enumerable you can override `.call`
 on your service object. Invoking `#super` in your definition and passing along 
 the appropriate arguments will allow your command chain to proceed as normal, but
 called multiple times via a loop. The Result object returned from each call to `#super`
@@ -160,6 +162,11 @@ class LoopingService
   def self.call(count:)
     count = kwargs
 
+    # In this example the result object from super overwrites 
+    # the previous result/initial args. You could also capture 
+    # results in an array or hash for further manipulation.
+    # If you do not need to do anything with the result object
+    # then there is no need to assign it back to anything. 
     3.times do
       count = super(count)
     end
