@@ -63,7 +63,7 @@ module SimpleService
         if service.method(cmnd).arity.zero?
           service.public_send(cmnd)
         else
-          service.public_send(cmnd, service.result.value)
+          service.public_send(cmnd, **service.result.value)
         end
       end
 
