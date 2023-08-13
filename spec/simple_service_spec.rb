@@ -2,6 +2,7 @@ require 'spec_helper'
 require_relative 'support/basic_service'
 require_relative 'support/looping_service'
 require_relative 'support/empty_service'
+require_relative 'support/multiple_outcome_calls'
 
 RSpec.describe SimpleService do
 
@@ -87,31 +88,50 @@ RSpec.describe SimpleService do
   end
 
   context 'record commands' do
+    it 'value refects only one outcome call per command' do
+      result = MultipleOutcomeCalls.call(params.merge(foo: 'foo', bar: 'bar'))
+      expect(result.value).to eq(foo: 'FOO', bar: 'BAR')
+    end
+
+    it 'recorded commands has only one outcome call per command' do
+      result = MultipleOutcomeCalls.call(params.merge(foo: 'foo', bar: 'bar'))
+      expect(result.recorded_commands).to eq(Set.new([
+        {
+          class_name: 'MultipleOutcomeCalls',
+          command_name: :command_one,
+          success: true,
+        },
+        {
+          class_name: 'MultipleOutcomeCalls',
+          command_name: :command_two,
+          success: true,
+        },
+      ]))
+    end
+
     it 'records normal command execution' do
-      expect(result.recorded_commands).to eq(
-        [
-          {
-            class_name: 'BasicService',
-            command_name: :upcase_foo,
-            success: true,
-          },
-          {
-            class_name: 'BasicService',
-            command_name: :upcase_bar,
-            success: true,
-          },
-          {
-            class_name: 'ModifyFooBar',
-            command_name: :call,
-            success: true,
-          },
-          {
-            class_name: 'CombineFooBar',
-            command_name: :call,
-            success: true,
-          },
-        ]
-      )
+      expect(result.recorded_commands).to eq(Set.new([
+        {
+          class_name: 'BasicService',
+          command_name: :upcase_foo,
+          success: true,
+        },
+        {
+          class_name: 'BasicService',
+          command_name: :upcase_bar,
+          success: true,
+        },
+        {
+          class_name: 'ModifyFooBar',
+          command_name: :call,
+          success: true,
+        },
+        {
+          class_name: 'CombineFooBar',
+          command_name: :call,
+          success: true,
+        },
+      ]))
     end
 
     it 'records verbose command execution' do
@@ -119,7 +139,7 @@ RSpec.describe SimpleService do
         config.verbose_tracking = true
       end
 
-      expect(result.recorded_commands).to eq(
+      expect(result.recorded_commands).to eq(Set.new(
         [
           {
             class_name: 'BasicService',
@@ -181,7 +201,7 @@ RSpec.describe SimpleService do
             },
           },
         ]
-      )
+      ))
     end
   end
 end

@@ -3,7 +3,7 @@ module SimpleService
     attr_accessor :value, :recorded_commands
 
     def initialize()
-      @recorded_commands = []
+      @recorded_commands = Set.new
       @verbose_tracking = SimpleService.configuration.verbose_tracking
     end
 
