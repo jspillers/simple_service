@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = SimpleService::VERSION
   spec.authors       = ['Jarrod Spillers']
   spec.email         = ['jarrod@stacktact.com']
-  spec.description   = %q{A minimal service object composer with support for individual commands and top level organizer objects}
+  spec.description   = %q{A minimal service object composer and orchestrator}
   spec.summary       = spec.description
   spec.homepage      = 'https://github.com/jspillers/simple_service'
   spec.license       = 'MIT'
@@ -22,6 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 12.3.3'
   spec.add_development_dependency 'rspec', '~> 3.12.0'
   spec.add_development_dependency 'pry', '~> 0.14.2'
-  spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'codeclimate-test-reporter'
+  spec.add_development_dependency 'simplecov-json'
 end
