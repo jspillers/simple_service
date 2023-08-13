@@ -1,4 +1,4 @@
-name: build
+name: CodeClimate
 
 on: [push, pull_request]
 
