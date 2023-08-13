@@ -5,7 +5,6 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
@@ -23,7 +22,8 @@ jobs:
           gem install bundler
           bundle install --jobs 4 --retry 3
           bundle exec rspec
-      - name: Publish code coverage
-        run: |
-          export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
-          ./cc-test-reporter after-build -r ${{secrets.SIMPLE_SERVICE_CODECLIMATE_ID}}
+      - name: Code Climate Test Reporter
+        uses: aktions/codeclimate-test-reporter@v1
+        with:
+          codeclimate-test-reporter-id: ${{ secrets.SIMPLE_SERVICE_CODECLIMATE_ID }}
+          command: after-build

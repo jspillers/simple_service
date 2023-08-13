@@ -7,12 +7,6 @@ on:
     branches: ["master"]
 
 jobs:
-  codeclimate:
-    name: Code Climate Test Reporter
-    uses: aktions/codeclimate-test-reporter@v1
-    with:
-      codeclimate-test-reporter-id: ${{secrets.SIMPLE_SERVICE_CODECLIMATE_ID}}
-      command: after-build
   build:
     name: Build + Publish
     runs-on: ubuntu-latest
