@@ -26,4 +26,4 @@ jobs:
       - name: Publish code coverage
         run: |
           export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
-          ./cc-test-reporter after-build -r ${{SIMPLE_SERVICE_CODECLIMATE_ID}}
+          ./cc-test-reporter after-build -r ${{secrets.SIMPLE_SERVICE_CODECLIMATE_ID}}
