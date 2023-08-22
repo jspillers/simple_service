@@ -2,6 +2,7 @@ name: Build Master
 
 env:
   CC_TEST_REPORTER_URL: https://codeclimate.com/downloads/test-reporter/test-reporter-0.7.0-linux-amd64
+  CC_TEST_REPORTER_ID: ${{ secrets.SIMPLE_SERVICE_CODECLIMATE_ID }}
 
 on:
   pull_request:
@@ -16,7 +17,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
-        ruby: ["2.7", "3.0", "3.1", head]
+        ruby: ["2.7.0", "3.2.2"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -62,9 +63,6 @@ jobs:
 
   upload_coverage:
     runs-on: ubuntu-18.04
-
-    env:
-      CC_TEST_REPORTER_ID: ${{ secrets.SIMPLE_SERVICE_CODECLIMATE_ID }}
 
     needs: test
 
