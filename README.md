@@ -1,28 +1,26 @@
 # SimpleService
 
 [![Gem Version](https://badge.fury.io/rb/simple_service.svg)](http://badge.fury.io/rb/simple_service)
-[![Code Climate](https://codeclimate.com/github/jspillers/simple_service/badges/gpa.svg)](https://codeclimate.com/github/jspillers/simple_service)
-[![Test Coverage](https://codeclimate.com/github/jspillers/simple_service/badges/coverage.svg)](https://codeclimate.com/github/jspillers/simple_service)
-[![Build Status](https://travis-ci.org/jspillers/simple_service.svg?branch=master)](https://travis-ci.org/jspillers/simple_service)
-<!--![](http://ruby-gem-downloads-badge.herokuapp.com/jspillers/simple_service)-->
+[![Maintainability](https://api.codeclimate.com/v1/badges/4b75735e83e2bc944285/maintainability)](https://codeclimate.com/github/jspillers/simple_service/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/4b75735e83e2bc944285/test_coverage)](https://codeclimate.com/github/jspillers/simple_service/test_coverage)
 
 SimpleService facilitates the creation of Ruby service objects into highly discreet, reusable,
-and composable units of business logic. The core concept of SimpleService is the definition of 
-"Command" objects/methods. Commands are very small classes or methods that perform exactly one task. 
+and composable units of business logic. The core concept of SimpleService is the definition of
+"Command" objects/methods. Commands are very small classes or methods that perform exactly one task.
 When properly designed, these command objects can be composited together or even nested to create
 complex flows.
 
 # 2.0.0 update notes
 
-This update is a major refactor from previous 1.x.x versions. After revisiting this codebase I decided that 
+This update is a major refactor from previous 1.x.x versions. After revisiting this codebase I decided that
 I needed to make SimpleService actually simple in both use and implementation. The gem has now been paired down
 to about 150 lines of code.
 
-* All functionality is added to your service class via module inclusion instead of inheritance
-* The concept of an Organizer has been removed
-* The DSL for defining interfaces has been removed in favor of simple keyword arguments
-* `#success` or `#failure` must be called within each command or call method
-* Services are always invoked via the class method `.call`. Previously you could use either `#call` or `.call`.
+- All functionality is added to your service class via module inclusion instead of inheritance
+- The concept of an Organizer has been removed
+- The DSL for defining interfaces has been removed in favor of simple keyword arguments
+- `#success` or `#failure` must be called within each command or call method
+- Services are always invoked via the class method `.call`. Previously you could use either `#call` or `.call`.
 
 ## Installation
 
@@ -40,10 +38,10 @@ Or install it yourself as:
 
 # Setup and Basic Usage:
 
-* load the gem
-* include the SimpleService module into your service object class
-* define one or more comamnds that it will perform, must accept either keyword arguments or a hash argument
-* call `#success` or `#failure` with any values you wish to pass along to the next command (or wish to return if it is the last command)
+- load the gem
+- include the SimpleService module into your service object class
+- define one or more comamnds that it will perform, must accept either keyword arguments or a hash argument
+- call `#success` or `#failure` with any values you wish to pass along to the next command (or wish to return if it is the last command)
 
 ```ruby
 require 'rubygems'
@@ -100,7 +98,7 @@ You can also use ClassNames as commands and to organize them into other files. I
 defined and no other commands are defined via `command` or `commands` then SimpleService will
 automatically use `#call` as the default command
 
-```ruby 
+```ruby
 require 'rubygems'
 require 'simple_service'
 
@@ -144,7 +142,7 @@ result.value #=> {something: 'went wrong'}
 ```
 
 If you would like your service to process an enumerable you can override `.call`
-on your service object. Invoking `#super` in your definition and passing along 
+on your service object. Invoking `#super` in your definition and passing along
 the appropriate arguments will allow your command chain to proceed as normal, but
 called multiple times via a loop. The Result object returned from each call to `#super`
 can be passed in as an argument to the next iteration or you can collect the result objects
@@ -162,11 +160,11 @@ class LoopingService
   def self.call(count:)
     count = kwargs
 
-    # In this example the result object from super overwrites 
-    # the previous result/initial args. You could also capture 
+    # In this example the result object from super overwrites
+    # the previous result/initial args. You could also capture
     # results in an array or hash for further manipulation.
     # If you do not need to do anything with the result object
-    # then there is no need to assign it back to anything. 
+    # then there is no need to assign it back to anything.
     3.times do
       count = super(count)
     end
@@ -179,13 +177,13 @@ class LoopingService
   end
 end
 
-result = LoopingService.call(count: 0) 
+result = LoopingService.call(count: 0)
 result.is_a?(SimpleService::Result) #=> true
 result.value #=> {count: 3}
 ```
 
-If you are using this with a Rails app, placing top level services in 
-`app/services/` and all nested commands in `app/services/commands/` is 
+If you are using this with a Rails app, placing top level services in
+`app/services/` and all nested commands in `app/services/commands/` is
 recommended. Even if not using rails, a similar structure also works well.
 
 ## Contributing
