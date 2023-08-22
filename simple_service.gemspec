@@ -18,6 +18,14 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
+  spec.metadata = {
+    "bug_tracker_uri" => "#{spec.homepage}/issues",
+    "changelog_uri" => "#{spec.homepage}/blob/main/CHANGELOG.md",
+    "documentation_uri" => spec.homepage.to_s,
+    "homepage_uri" => spec.homepage.to_s,
+    "source_code_uri" => spec.homepage.to_s,
+  }
+
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake', '~> 12.3.3'
   spec.add_development_dependency 'rspec', '~> 3.12.0'
